@@ -1,0 +1,96 @@
+nadav366
+
+itay.tayar guyk12123 yair.shemer
+
+=============================
+=      File description     =
+=============================
+- SimpleHashSet.java - A superclass for implementations of hash-sets.
+- OpenHashSet.java - Collection realized by Open Hash.
+- ClosedHashSet.java - Collection realized by Closed Hash.
+- CollectionFacadeSet.java - Wraps an underlying Collection and serves to both simplify its API and give it a
+                             common type with the implemented SimpleHashSets.
+- SimpleSetPerformanceAnalyzer.java - calculates the performance of several SimpleSet types.
+- StringLinkList.java - surrounds the linked class of a string to use in the array.
+
+- RESULTS - Results of analysis of the results of the various collections
+- README - This document
+
+=============================
+=          Design           =
+=============================
+- To implement the table for OpenHashSet I chose to write a class that contains a linked list of strings.
+  By realizing this, I could control exactly all the features I wanted to require from the list,
+  such as give an iterator to go through all the entries in the list,
+  check whether the string in the list, add and delete.
+
+- In the deletion mechanism application in ClosedHashSet I wanted to "mark" an extra flag (except null)
+  for deleted cells so that in search we would know to skip them.
+  I chose to apply a mechanism in which we have a particular string object, reserved, that inserts its
+  *address* into each deleted cell, thus checking whether the cell contains the address and is marked
+  as deleted.
+  Thus, during the deletion phase, we will insert the highlighted address into the cell, and if we find the
+  address we will know how to continue searching.
+  When we resize, we reset the entire table and delete all the markings.
+
+
+=============================
+=  Implementation details   =
+=============================
+
+- In the CollectionFacadeSet class, after we have been told that there are no duplicates in the collection,
+  all that is left to keep it without duplicates is to verify before any add that the string does not appear.
+  That way the collection is preserved all the time without duplicates, and we are spared a lot of testing.
+
+- In the SimpleSetPerformanceAnalyzer class, I chose to receive input from the user so that I could run
+  only some of the tests (both from the collections and from the tests) without changing the code.
+  Now it is very convenient to run the test in a modular way, but changing the code and adding more tests
+  requires changing in several places. I understood from you that this is the instructions.
+
+
+=================================================
+=  Discussion of performance analysis results   =
+=================================================
+- For data entry in data1 we received very bad results both in OpenHashSet and in ClosedHashSet.
+  The reason for this was that the whole idea of ​​hash is based on the fact that the corresponding
+  function returns ideals in a uniform distribution. Once we receive information that has the same index,
+  the entire table is superfluous and we are only engaged in collisions.
+
+  In OpenHashSet, we get all the information to focus on a single linked list, which is very inefficient
+  to search for if an organ is already present or not, so the income time is very long.
+  In the closedHashSet we will obtain that for each income we will have to "skip" lots and lots of cells
+  until we find the next empty cell that corresponds to the index.
+  All in all, when the mixing function does not work, the whole idea of ​​the tables is
+  destroyed and we get bad running times.
+
+- OpenHashSet: When the hash function of the strings are evenly distributed, gives relatively quick income
+                and testing of contain very fast. When there is no uniform, slow and inefficient distribution.
+                You can use regular string collections.
+- ClosedHashSet: As before, depends on the hash function. When there is no uniform distribution is the slowest.
+                 In all other cases it is very fast and should be used.
+                 To find a word that is in the collection, it is very fast. And finding a word that is not in
+                 the collection takes a little longer.
+- TreeSet: Its income is relatively fast (not the fastest but not the bad) and does not depend on the hash
+            function, but its contain is stable but not the fastest.
+            I would use it when I was afraid that the strings would not split well or that I needed a quick
+            income but not many tests what it contains.
+- LinkedList: Less sophisticated structure, the input depends only on the input size and not on its properties.
+                Every test whether something is found requires going through (at worst) all over
+                the list. But it saves space.
+                I would use it only for very small collections, or collections that are important to order.
+- HashSet: The most beautiful and quick collection. Runs the fastest in almost all cases. Only the contain
+            check is sometimes faster than another.
+            I would use it for large collections, and for cases where there is a significant importance to
+            running time.
+
+- In the rare case of data1, OpenHashSet introduced much faster data, but it took more time to search.
+  But in the usual case of Data2 ClosedHashSet adds more data faster, but searches more slowly.
+  I think that bottom line ClosedHashSet functions better, because the gaps in revenue are large and in
+  search really small and therefore is more effective.
+
+- The comparison between my exercise and the built-in functions is divided-
+  For LinkedList is much weaker, anyway.
+  But TreeSet manages to deal nicely with cases where the hash function complicated the realization to me at
+  long running time. But in most cases my realization was faster.
+  HashSet is simply faster than mine in every parameter and in most situations. When mine was faster it was
+  at very, very terrible times. And so is the best.
